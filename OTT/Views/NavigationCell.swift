@@ -11,7 +11,7 @@ class NavigationCell: UICollectionViewCell {
     
     public var navLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .systemBackground
+        label.textColor = UIColor.white.withAlphaComponent(0.5)
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -30,6 +30,7 @@ class NavigationCell: UICollectionViewCell {
         }
     }
     
+    // refactor this
     private func navStack() {
         let stackView = UIStackView(arrangedSubviews: [navLabel])
         stackView.translatesAutoresizingMaskIntoConstraints = false

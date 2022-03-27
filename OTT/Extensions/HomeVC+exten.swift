@@ -14,7 +14,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return navData.count
         }
         
-        return self.channels.count
+        return self.filteredChannels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -25,18 +25,14 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             
             // Set up Nav cell
             let data = navData[indexPath.row]
-            navCell.navLabel.text = data.navChannel
+            navCell.navLabel.text = data.rawValue
             return navCell
             
         } else {
             guard let channelCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as? ChannelCell else {
                 return UICollectionViewCell()
             }
-            
-            // Set up Channel cell
-            let data = channels[indexPath.row]
-            channelCell.channelImage.image = UIImage(named: data.image)
-            channelCell.backgroundColor = .white
+            channelCell.channel = self.filteredChannels[indexPath.item]
             return channelCell
         }
     }
@@ -45,6 +41,13 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.navigationCV {
             collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            if indexPath.item == 0 {
+                self.filteredChannels = self.channels
+            } else {
+                let indexed = self.navData[indexPath.item]
+                self.filteredChannels = self.channels.filter { $0.headerType == indexed }
+            }
+            self.channelCV.reloadData()
         }
     }
     

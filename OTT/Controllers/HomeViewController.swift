@@ -9,25 +9,28 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    var navData: [HeaderTypes] = [
+    var navData: [HeaderType] = HeaderType.allCases /*[
         HeaderTypes(navChannel: "ВСЕ"),
         HeaderTypes(navChannel: "НОВОСТИ"),
         HeaderTypes(navChannel: "СПОРТ"),
         HeaderTypes(navChannel: "ПРИРОДА")
-    ]
+    ]*/
     
     var channels: [Channel] = [
-        Channel(id: 0, title: "ZorTV", image: "zortv"),
-        Channel(id: 1, title: "Madaniyat va Marifat", image: "madaniyat"),
-        Channel(id: 2, title: "MilliyTV", image: "milliy"),
-        Channel(id: 3, title: "My5", image: "my5"),
-        Channel(id: 4, title: "Россия24", image: "russia24"),
-        Channel(id: 5, title: "Sevimli", image: "sevimli"),
-        Channel(id: 6, title: "НТВ", image: "ntv"),
-        Channel(id: 7, title: "National Geographic", image: "natgeo"),
-        Channel(id: 8, title: "Euro News", image: "euronews"),
-        Channel(id: 9, title: "Первый Канал", image: "ort")
+        
+        Channel(id: 0, title: "ZorTV", image: "zortv", headerType: .nature),
+        Channel(id: 1, title: "Madaniyat va Marifat", image: "madaniyat", headerType: .news),
+        Channel(id: 2, title: "MilliyTV", image: "milliy", headerType: .sport),
+        Channel(id: 3, title: "My5", image: "my5", headerType: .nature),
+        Channel(id: 4, title: "Россия24", image: "russia24", headerType: .news),
+        Channel(id: 5, title: "Sevimli", image: "sevimli", headerType: .sport),
+        Channel(id: 6, title: "НТВ", image: "ntv", headerType: .nature),
+        Channel(id: 7, title: "National Geographic", image: "natgeo", headerType: .nature),
+        Channel(id: 8, title: "Euro News", image: "euronews", headerType: .news),
+        Channel(id: 9, title: "Первый Канал", image: "ort", headerType: .news)
     ]
+    
+    var filteredChannels: [Channel] = []
     
     // MARK: - Connecting the two collection views
     
@@ -110,8 +113,7 @@ class HomeViewController: UIViewController {
         channelCV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         channelCV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
         channelCV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        
-                    
+    
         // Load collection view data
         navigationCV.delegate = self
         navigationCV.dataSource = self
@@ -119,5 +121,12 @@ class HomeViewController: UIViewController {
         channelCV.delegate = self
         channelCV.dataSource = self
         
+        self.filteredChannels = self.channels
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationCV.selectItem(at: IndexPath(item: 0, section: 0), animated: true, scrollPosition: .left)
     }
 }

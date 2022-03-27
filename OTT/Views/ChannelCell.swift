@@ -18,24 +18,23 @@ class ChannelCell: UICollectionViewCell {
         return image
     }()
     
-    private func navStack() {
-        let stackView = UIStackView(arrangedSubviews: [channelImage])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.distribution = .fill
-        contentView.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-        ])
+    private lazy var stackView: UIStackView = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.axis = .vertical
+        $0.distribution = .fill
+        return $0
+    }(UIStackView(arrangedSubviews: [channelImage]))
+    
+    var channel: Channel! {
+        didSet {
+            self.channelImage.image = UIImage(named: channel.image)
+        }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(channelImage)
+        self.embedSubviews()
+        self.setConstraints()
     }
     
     override func layoutSubviews() {
@@ -45,6 +44,21 @@ class ChannelCell: UICollectionViewCell {
         self.layer.borderWidth = 0.5
 
         channelImage.frame = contentView.bounds
+    }
+    
+    fileprivate func embedSubviews() {
+        self.backgroundColor = .white
+        contentView.addSubview(channelImage)
+        contentView.addSubview(stackView)
+    }
+    
+    fileprivate func setConstraints() {
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     override func prepareForReuse() {

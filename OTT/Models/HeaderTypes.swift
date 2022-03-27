@@ -7,6 +7,13 @@
 
 import Foundation
 
+enum HeaderType: String, CaseIterable {
+    case all = "ВСЕ"
+    case news = "НОВОСТИ"
+    case sport = "СПОРТ"
+    case nature = "ПРИРОДА"
+}
+
 struct HeaderTypes {
    var navChannel: String = ""
     
