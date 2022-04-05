@@ -38,13 +38,22 @@ class HomeViewController: UIViewController {
     public let navigationCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(NavigationCell.self, forCellWithReuseIdentifier: "Cell1")
         collectionView.backgroundColor = .clear
         collectionView.clipsToBounds = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
         return collectionView
     }()
+    
+    private(set) var lineView: UIView = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = UIColor.white
+        return $0
+    }(UIView())
     
     public let channelCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -79,6 +88,8 @@ class HomeViewController: UIViewController {
         return label
     }()
     
+    var leadingConstraint: NSLayoutConstraint!
+    
     // Adding two labels into the Horizontal Stack View with customized constraints
     private func headerTitles() {
         let headerTitleStackView = UIStackView(arrangedSubviews: [ottLabel, primaryLabel])
@@ -101,12 +112,13 @@ class HomeViewController: UIViewController {
         view.backgroundColor = .label
         headerTitles()
         view.addSubview(navigationCV)
+        view.addSubview(lineView)
         view.addSubview(channelCV)
         
         // Customization the constraints of two collection views
         navigationCV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
-        navigationCV.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        navigationCV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        navigationCV.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        navigationCV.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
         navigationCV.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
         channelCV.topAnchor.constraint(equalTo: navigationCV.bottomAnchor, constant: 20).isActive = true
@@ -123,6 +135,15 @@ class HomeViewController: UIViewController {
         
         self.filteredChannels = self.channels
         
+        leadingConstraint = lineView.leftAnchor.constraint(equalTo: view.leftAnchor)
+        
+        NSLayoutConstraint.activate([
+            leadingConstraint,
+            lineView.bottomAnchor.constraint(equalTo: navigationCV.bottomAnchor),
+            lineView.heightAnchor.constraint(equalToConstant: 2.0),
+            lineView.widthAnchor.constraint(equalToConstant: 
+                                                (navigationCV.collectionViewLayout as! UICollectionViewFlowLayout).itemSize.width)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
