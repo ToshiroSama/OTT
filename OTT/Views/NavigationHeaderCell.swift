@@ -7,9 +7,9 @@
 
 import UIKit
 
-class NavigationCell: UICollectionViewCell {
+class NavigationHeaderCell: UICollectionViewCell {
     
-    public var navLabel: UILabel = {
+    lazy var navLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.white.withAlphaComponent(0.5)
         label.font = UIFont.boldSystemFont(ofSize: 17)
@@ -30,27 +30,17 @@ class NavigationCell: UICollectionViewCell {
         }
     }
     
-    // refactor this
-    private func navStack() {
-        let stackView = UIStackView(arrangedSubviews: [navLabel])
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.alignment = .center
-        contentView.addSubview(stackView)
-        stackView.topAnchor.constraint(equalTo: topAnchor, constant: 15).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15).isActive = true
-        stackView.widthAnchor.constraint(equalToConstant: 90).isActive = true
-    }
-        
     override init(frame: CGRect) {
         super.init(frame: frame)
-        navStack()
+        setupViews()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        navLabel.frame = contentView.bounds
+    func setupViews() {
+        addSubview(navLabel)
+        addConstraintsWithFormat(format: "H:[v0(90)]", views: navLabel)
+        
+        addConstraint(NSLayoutConstraint(item: navLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: navLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
     }
     
     required init?(coder: NSCoder) {

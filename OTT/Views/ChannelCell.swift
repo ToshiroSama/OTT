@@ -25,11 +25,11 @@ class ChannelCell: UICollectionViewCell {
         return $0
     }(UIStackView(arrangedSubviews: [channelImage]))
     
-    var channel: Channel! {
-        didSet {
-            self.channelImage.image = UIImage(named: channel.image)
-        }
-    }
+//    var channelToItems: ChannelItems! {
+//        didSet {
+//            self.channelImage.image = URL(string: <#T##String#>)
+//        }
+//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

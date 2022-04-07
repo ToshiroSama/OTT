@@ -7,9 +7,21 @@
 
 import Foundation
 
-struct Channel {
-    var id: Int  = 0
-    var title: String = ""
-    var image: String = ""
-    var headerType: HeaderType
+enum HeaderType: String, CaseIterable {
+    case all = "ВСЕ"
+    case uzbek = "УЗБЕК"
+    case news = "НОВОСТИ"
+    case nature = "ПРИРОДА"
+}
+
+struct Channel: Codable {
+    let data: [ChannelItems]
+}
+
+struct ChannelItems: Codable {
+    let id: Int
+    let title: String
+    let tv_link: String
+    var image: String
+    let category_id: Int
 }
