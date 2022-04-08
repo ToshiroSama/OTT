@@ -19,6 +19,7 @@
 		6361922C27FD49D700628A66 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6361922B27FD49D700628A66 /* Extension.swift */; };
 		6363611227E9B4EB0009B300 /* NavigationHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6363611127E9B4EB0009B300 /* NavigationHeaderCell.swift */; };
 		6363611427E9B4FF0009B300 /* ChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6363611327E9B4FF0009B300 /* ChannelCell.swift */; };
+		63A38E3D2800623900B07032 /* ChannelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A38E3C2800623900B07032 /* ChannelService.swift */; };
 		63F9740727FEADA600864364 /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 63F9740627FEADA600864364 /* data.json */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		6361922B27FD49D700628A66 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		6363611127E9B4EB0009B300 /* NavigationHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHeaderCell.swift; sourceTree = "<group>"; };
 		6363611327E9B4FF0009B300 /* ChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCell.swift; sourceTree = "<group>"; };
+		63A38E3C2800623900B07032 /* ChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelService.swift; sourceTree = "<group>"; };
 		63F9740627FEADA600864364 /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -70,7 +72,7 @@
 		63390FBD27E4A2FB006F951B /* OTT */ = {
 			isa = PBXGroup;
 			children = (
-				6361922827FD484A00628A66 /* JSON */,
+				6361922827FD484A00628A66 /* Network & JSON */,
 				63390FD627E4A4BE006F951B /* Models */,
 				63390FD527E4A4B8006F951B /* Views */,
 				63390FD427E4A4A3006F951B /* Controllers */,
@@ -120,12 +122,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		6361922827FD484A00628A66 /* JSON */ = {
+		6361922827FD484A00628A66 /* Network & JSON */ = {
 			isa = PBXGroup;
 			children = (
 				63F9740627FEADA600864364 /* data.json */,
+				63A38E3C2800623900B07032 /* ChannelService.swift */,
 			);
-			path = JSON;
+			path = "Network & JSON";
 			sourceTree = "<group>";
 		};
 		6363611727E9CE590009B300 /* Extensions */ = {
@@ -214,6 +217,7 @@
 				6361922A27FD48E300628A66 /* MenuBar.swift in Sources */,
 				6361922C27FD49D700628A66 /* Extension.swift in Sources */,
 				63390FC127E4A2FB006F951B /* SceneDelegate.swift in Sources */,
+				63A38E3D2800623900B07032 /* ChannelService.swift in Sources */,
 				6363611427E9B4FF0009B300 /* ChannelCell.swift in Sources */,
 				63390FD827E4A53F006F951B /* HomeViewController.swift in Sources */,
 				6363611227E9B4EB0009B300 /* NavigationHeaderCell.swift in Sources */,

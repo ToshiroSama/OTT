@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol MenuBarDelegate: AnyObject {
+    func didSelectItem(at indexPath: IndexPath)
+}
+
 class MenuBar: UIView {
     
-    lazy var navigationCV: UICollectionView = {
+    var navigationCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -18,13 +22,20 @@ class MenuBar: UIView {
         collectionView.backgroundColor = .clear
         collectionView.clipsToBounds = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
         return collectionView
     }()
     
     var navData: [HeaderType] = HeaderType.allCases
     var cellId = "cellId"
+    
+    var currentIndex: Int = 0 {
+        didSet {
+            let indexPath = IndexPath(item: currentIndex, section: 0)
+            navigationCV.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+        }
+    }
+    
+    weak var delegate: MenuBarDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,7 +44,13 @@ class MenuBar: UIView {
         addConstraintsWithFormat(format: "H:|[v0]|", views: navigationCV)
         addConstraintsWithFormat(format: "V:|[v0]|", views: navigationCV)
         
+        navigationCV.delegate = self
+        navigationCV.dataSource = self
+        
         setupHorizontalBar()
+        
+        let indexPath = IndexPath(item: currentIndex, section: 0)
+        navigationCV.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
     }
     
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
@@ -69,7 +86,7 @@ extension MenuBar: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourc
             return UICollectionViewCell()
         }
         let data = navData[indexPath.row]
-        cell.navLabel.text = data.rawValue
+        cell.navLabel.text = data.getTitle()
         return cell
     }
     
@@ -84,6 +101,9 @@ extension MenuBar: UICollectionViewDelegateFlowLayout, UICollectionViewDataSourc
         UIView.animate(withDuration: 0.50, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.layoutIfNeeded()
         }, completion: nil)
+        
+        self.currentIndex = indexPath.item
+        self.delegate?.didSelectItem(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

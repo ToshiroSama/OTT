@@ -9,7 +9,9 @@ import UIKit
 
 class ChannelCell: UICollectionViewCell {
     
-    public var channelImage: UIImageView = {
+    static let identifier = "ChannelCell"
+    
+    lazy var channelImage: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.clipsToBounds = true
@@ -24,12 +26,6 @@ class ChannelCell: UICollectionViewCell {
         $0.distribution = .fill
         return $0
     }(UIStackView(arrangedSubviews: [channelImage]))
-    
-//    var channelToItems: ChannelItems! {
-//        didSet {
-//            self.channelImage.image = URL(string: <#T##String#>)
-//        }
-//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

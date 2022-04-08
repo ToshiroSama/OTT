@@ -8,43 +8,29 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    
-    var channels: Channel?
-    var filteredChannels: [Channel] = []
-    
-    // MARK: - Parsing JSON data objects
-    
-    private func parseJSON() {
-        guard let path = Bundle.main.path(forResource: "data", ofType: "json") else { return }
-        
-        let url = URL(fileURLWithPath: path)
-        
-        do {
-            let jsonData = try Data(contentsOf: url)
-            channels = try JSONDecoder().decode(Channel.self, from: jsonData)
-        } catch {
-            print("Error \(error)")
-        }
-    }
-    
-    // MARK: - Connecting the two collection views
-    
-    // Calling the two collection views
-    let menuBar: MenuBar = {
+   
+    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
+        mb.delegate = self
         return mb
     }()
     
-    public let channelCV: UICollectionView = {
+    lazy var channelCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(ChannelCell.self, forCellWithReuseIdentifier: "Cell2")
+        collectionView.register(ChannelCell.self, forCellWithReuseIdentifier: ChannelCell.identifier)
         collectionView.backgroundColor = .clear
         collectionView.clipsToBounds = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
+    
+    var filteredChannels: [ChannelItems] = [] {
+        didSet {
+            self.channelCV.reloadData()
+        }
+    }
 
     // MARK: - Title
     
@@ -67,8 +53,6 @@ class HomeViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    var leadingConstraint: NSLayoutConstraint!
     
     // Adding two labels into the Horizontal Stack View with customized constraints
     private func headerTitles() {
@@ -100,10 +84,8 @@ class HomeViewController: UIViewController {
         channelCV.delegate = self
         channelCV.dataSource = self
         
-//        self.filteredChannels = self.channels
-        
+        self.filteredChannels = ChannelService.shared.channels
         setupBarMenu()
-        parseJSON()
     }
     
     private func setupBarMenu() {
@@ -117,40 +99,27 @@ class HomeViewController: UIViewController {
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return channels?.data.count ?? 0
+        return filteredChannels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let channelCell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell2", for: indexPath) as? ChannelCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChannelCell.identifier, for: indexPath) as? ChannelCell else {
             return UICollectionViewCell()
         }
         
-        let model = channels?.data[indexPath.item]
-        let urlString = model?.image
-        let url = URL(string: urlString!)
+        let model = filteredChannels[indexPath.item]
+        let urlString = model.image
+        let url = URL(string: urlString)
         let data = try? Data(contentsOf: url!)
         if let imageData = data {
             let image = UIImage(data: imageData)
-            channelCell.channelImage.image = image
+            cell.channelImage.image = image
         } else {
-            channelCell.channelImage.image = UIImage(named: "")
+            cell.channelImage.image = UIImage(named: "")
         }
-        return channelCell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == menuBar.navigationCV {
-            if indexPath.item == 0 {
-//                self.filteredChannels = self.channels
-            } else {
-                let indexed = menuBar.navData[indexPath.item]
-//                self.filteredChannels = self.channels.filter { $0.headerType == indexed }
-            }
-        }
-        self.channelCV.reloadData()
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -169,4 +138,16 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         return 10
     }
     
+}
+
+extension HomeViewController: MenuBarDelegate {
+    func didSelectItem(at indexPath: IndexPath) {
+        self.filteredChannels = {
+            if indexPath.item == 0 {
+                return ChannelService.shared.channels
+            } else {
+                return ChannelService.shared.channels.filter { $0.headerType == HeaderType.allCases[indexPath.item] }
+            }
+        }()
+    }
 }
