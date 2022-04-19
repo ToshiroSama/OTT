@@ -44,6 +44,6 @@ class NavigationHeaderCell: UICollectionViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Error (code:) has not been implemented")
+        fatalError("init(code:) has not been implemented")
     }
 }

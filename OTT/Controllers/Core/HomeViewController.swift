@@ -9,13 +9,13 @@ import UIKit
 
 class HomeViewController: UIViewController {
    
-    lazy var menuBar: MenuBar = {
+    private lazy var menuBar: MenuBar = {
         let mb = MenuBar()
         mb.delegate = self
         return mb
     }()
     
-    lazy var channelCV: UICollectionView = {
+    private lazy var channelCV: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -34,7 +34,7 @@ class HomeViewController: UIViewController {
 
     // MARK: - Title
     
-    private let ottLabel: UILabel = {
+    private lazy var ottLabel: UILabel = {
         let label = UILabel()
         label.text = "ott"
         label.text = label.text?.uppercased()
@@ -44,7 +44,7 @@ class HomeViewController: UIViewController {
         return label
     }()
     
-    private let platformLabel: UILabel = {
+    private lazy var platformLabel: UILabel = {
         let label = UILabel()
         label.text = "platform"
         label.text = label.text?.uppercased()
@@ -73,6 +73,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.backButtonTitle = ""
         headerTitles()
         view.addSubview(channelCV)
         
@@ -97,6 +98,8 @@ class HomeViewController: UIViewController {
         menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
     }
 }
+
+// MARK: - Extensions
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
@@ -130,6 +133,15 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         return CGSize(width: width, height: 100.0)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let channelViewController = ChannelViewController()
+        navigationController?.pushViewController(channelViewController, animated: true)
+//        navigationController?.navigationBar.tintColor = .white
+//        let backBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: nil, action: nil)
+//        navigationItem.backBarButtonItem = backBarButtonItem
+        navigationController?.navigationBar.isHidden = true
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
@@ -137,7 +149,6 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10
     }
-    
 }
 
 extension HomeViewController: MenuBarDelegate {

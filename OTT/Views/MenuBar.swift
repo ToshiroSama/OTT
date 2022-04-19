@@ -70,7 +70,7 @@ class MenuBar: UIView {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Init(code:) has not been implemented")
+        fatalError("init(code:) has not been implemented")
     }
 }
 
