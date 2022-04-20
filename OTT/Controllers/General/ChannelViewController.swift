@@ -39,6 +39,7 @@ class ChannelViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Data source protocol
         channelTableView.delegate = self
         channelTableView.dataSource = self

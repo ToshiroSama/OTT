@@ -17,7 +17,7 @@ class SettingLauncher: NSObject {
         return cv
     }()
     
-    let cellHeight: CGFloat = 45
+    let cellHeight: CGFloat = 50
     let settings: [Setting] = {
         let firstDimension = Setting(sizeName: .firstDimension, imageName: "checkmark")
         let secondDimension = Setting(sizeName: .secondDimension, imageName: "checkmark")
@@ -29,7 +29,7 @@ class SettingLauncher: NSObject {
     override init() {
         super.init()
         collectionView.register(SettingCell.self, forCellWithReuseIdentifier: SettingCell.identifier)
-        
+        collectionView.register(SettingHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SettingHeader")
         collectionView.delegate = self
         collectionView.dataSource = self
     }
@@ -48,7 +48,8 @@ class SettingLauncher: NSObject {
             window.addSubview(blackView)
             window.addSubview(collectionView)
             
-            let height: CGFloat = CGFloat(settings.count) * cellHeight
+            let height: CGFloat = window.frame.height / 2 + 100
+            
             
             let y = window.frame.height - height
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
@@ -58,7 +59,7 @@ class SettingLauncher: NSObject {
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
                 self.blackView.alpha = 1
-                
+                self.collectionView.layer.cornerRadius = 10
                 self.collectionView.frame = CGRect(x: 0, y: y, width: self.collectionView.frame.width, height: self.collectionView.frame.height)
             }, completion: nil)
         }
@@ -91,6 +92,20 @@ extension SettingLauncher: UICollectionViewDelegate, UICollectionViewDelegateFlo
         let setting = settings[indexPath.item]
         cell.setting = setting
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let settingHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "SettingHeader", for: indexPath) as! SettingHeader
+            settingHeader.frame = CGRect(x: 0, y: 0, width: collectionView.frame.width, height: 50)
+            return settingHeader
+        }
+        
+        fatalError("Unexpected element kind")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 50)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

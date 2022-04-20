@@ -81,7 +81,7 @@ class VideoLauncher: UIView {
     
     lazy var controlsContainterView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.3)
+        view.backgroundColor = UIColor(white: 0, alpha: 1)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -97,13 +97,13 @@ class VideoLauncher: UIView {
     }
     
     private func addGradient() {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [
-            UIColor.clear.cgColor,
-            UIColor.systemBackground.cgColor
-        ]
-        gradientLayer.frame = bounds
-        layer.addSublayer(gradientLayer)
+//        let gradientLayer = CAGradientLayer()
+//        gradientLayer.colors = [
+//            UIColor.clear.cgColor,
+//            UIColor.systemBackground.cgColor
+//        ]
+//        gradientLayer.frame = bounds
+//        layer.addSublayer(gradientLayer)
     }
     
     fileprivate func embedSubviews() {

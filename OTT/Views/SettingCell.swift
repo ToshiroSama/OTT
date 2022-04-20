@@ -21,6 +21,12 @@ class SettingCell: UICollectionViewCell {
         }
     }
     
+    override var isSelected: Bool {
+        didSet {
+            self.nameLabel.textColor = self.isSelected ? UIColor.rgb(red: 10, green: 132, blue: 255) : UIColor.white.withAlphaComponent(0.5)
+        }
+    }
+    
     override var isHighlighted: Bool {
         didSet {
             backgroundColor = isHighlighted ? .darkGray : .white
@@ -34,21 +40,16 @@ class SettingCell: UICollectionViewCell {
         setupViews()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(code:) has not been implemented")
-    }
-    
     let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Setting"
-        label.font = UIFont.systemFont(ofSize: 17)
+        label.font = UIFont.systemFont(ofSize: 20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let iconImageView: UIImageView = {
-       let imageView = UIImageView()
-        imageView.image = UIImage(named: "settings")
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "checkmark")
         imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -58,10 +59,23 @@ class SettingCell: UICollectionViewCell {
         addSubview(nameLabel)
         addSubview(iconImageView)
         
-        addConstraintsWithFormat(format: "H:|-8-[v0(30)]-8-[v1]|", views: iconImageView, nameLabel)
-        addConstraintsWithFormat(format: "V:|[v0]|", views: nameLabel)
-        addConstraintsWithFormat(format: "V:[v0(30)]", views: iconImageView)
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 11),
+            nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            nameLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -11)
+        ])
         
-        addConstraint(NSLayoutConstraint(item: iconImageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
+        NSLayoutConstraint.activate([
+            iconImageView.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            iconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            iconImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+            iconImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 14),
+            iconImageView.heightAnchor.constraint(equalToConstant: 15)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(code:) has not been implemented")
     }
 }
