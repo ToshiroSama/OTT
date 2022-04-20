@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController{
    
     private lazy var menuBar: MenuBar = {
         let mb = MenuBar()
@@ -86,6 +86,7 @@ class HomeViewController: UIViewController {
         channelCV.dataSource = self
         
         self.filteredChannels = ChannelService.shared.channels
+        
         setupBarMenu()
     }
     
@@ -96,6 +97,10 @@ class HomeViewController: UIViewController {
         view.addConstraintsWithFormat(format: "V:[v0(60)]", views: menuBar)
         
         menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+    }
+    
+    func goToBack() {
+        navigationController?.popViewController(animated: true)
     }
 }
 
@@ -136,10 +141,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let channelViewController = ChannelViewController()
         navigationController?.pushViewController(channelViewController, animated: true)
-//        navigationController?.navigationBar.tintColor = .white
-//        let backBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: nil, action: nil)
-//        navigationItem.backBarButtonItem = backBarButtonItem
-        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.tintColor = .white
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {

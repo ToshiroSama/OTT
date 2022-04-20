@@ -25,6 +25,17 @@ class ChannelViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
+    lazy var settingsLauncher: SettingLauncher = {
+        let launcher = SettingLauncher()
+        launcher.channelViewController = self
+        return launcher
+    }()
+    
+    @objc func handleMore() {
+        // Show menu
+        settingsLauncher.showSettings()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,9 +43,17 @@ class ChannelViewController: UIViewController {
         channelTableView.delegate = self
         channelTableView.dataSource = self
         
+        setupNavBarRightButton()
         setupView()
         
         self.tableChannels = ChannelService.shared.channels
+    }
+    
+    private func setupNavBarRightButton() {
+        let settingImage = UIImage(named: "settings")
+        let settingButton = UIBarButtonItem(image: settingImage, style: .plain, target: self, action: #selector(handleMore))
+        
+        navigationItem.rightBarButtonItem = settingButton
     }
     
     private func setupView() {
@@ -52,6 +71,17 @@ class ChannelViewController: UIViewController {
             channelTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             channelTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
+    }
+    
+    func showControllerForSetting(setting: Setting) {
+        let dummySettingViewController = UIViewController()
+        dummySettingViewController.view.backgroundColor = .white
+        dummySettingViewController.navigationItem.title = setting.sizeName.rawValue
+        navigationController?.navigationBar.barStyle = .default
+        navigationController?.navigationBar.tintColor = .white
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.pushViewController(dummySettingViewController, animated: true)
     }
 }
 

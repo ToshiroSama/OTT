@@ -34,6 +34,7 @@ class VideoLauncher: UIView {
         if isPlaying {
             player?.pause()
             pausePlayButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            pausePlayButton.backgroundColor = UIColor(white: 0, alpha: 0)
         } else {
             player?.play()
             pausePlayButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
@@ -60,29 +61,6 @@ class VideoLauncher: UIView {
         return imageView
     }()
     
-    lazy var backButton: UIButton = {
-        let button = UIButton(type: .system)
-        let image = UIImage(systemName: "chevron.left")
-        button.setImage(image, for: UIControl.State())
-        button.tintColor = .white
-        button.addTarget(self, action: #selector(goToBack), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
-    @objc func goToBack() {
-        
-    }
-    
-    lazy var settingsButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(named: "gearshape")
-        button.setImage(image, for: .normal)
-        button.tintColor = .white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    
     lazy var landscapeButton: UIButton = {
         let button = UIButton()
         let image = UIImage(named: "viewfinder")
@@ -103,7 +81,8 @@ class VideoLauncher: UIView {
     
     lazy var controlsContainterView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        view.backgroundColor = UIColor(white: 0, alpha: 0.3)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -112,8 +91,19 @@ class VideoLauncher: UIView {
         backgroundColor = .black
         
         setupPlayerView()
+        addGradient()
         embedSubviews()
         setupConstraints()
+    }
+    
+    private func addGradient() {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor.clear.cgColor,
+            UIColor.systemBackground.cgColor
+        ]
+        gradientLayer.frame = bounds
+        layer.addSublayer(gradientLayer)
     }
     
     fileprivate func embedSubviews() {
@@ -124,10 +114,8 @@ class VideoLauncher: UIView {
         controlsContainterView.addSubview(pausePlayButton)
         controlsContainterView.addSubview(circleLabel)
         controlsContainterView.addSubview(textLabel)
-        controlsContainterView.addSubview(settingsButton)
         controlsContainterView.addSubview(landscapeButton)
         controlsContainterView.addSubview(aspectRatioButton)
-        controlsContainterView.addSubview(backButton)
     }
     
     fileprivate func setupConstraints() {
@@ -151,27 +139,15 @@ class VideoLauncher: UIView {
         ])
         
         NSLayoutConstraint.activate([
-            circleLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12),
+            circleLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -15),
             circleLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             circleLabel.widthAnchor.constraint(equalToConstant: 10),
             circleLabel.heightAnchor.constraint(equalToConstant: 10)
         ])
         
         NSLayoutConstraint.activate([
-            textLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
+            textLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -12),
             textLabel.leadingAnchor.constraint(equalTo: circleLabel.trailingAnchor, constant: 4)
-        ])
-        
-        NSLayoutConstraint.activate([
-            backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
-            backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
-            backButton.widthAnchor.constraint(equalToConstant: 8),
-            backButton.heightAnchor.constraint(equalToConstant: 13)
-        ])
-        
-        NSLayoutConstraint.activate([
-            settingsButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            settingsButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -18)
         ])
         
         NSLayoutConstraint.activate([
@@ -181,7 +157,7 @@ class VideoLauncher: UIView {
         
         NSLayoutConstraint.activate([
             aspectRatioButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            aspectRatioButton.trailingAnchor.constraint(equalTo: settingsButton.leadingAnchor, constant: -22)
+            aspectRatioButton.trailingAnchor.constraint(equalTo: landscapeButton.leadingAnchor, constant: -22)
         ])
     }
     
