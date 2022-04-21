@@ -18,8 +18,8 @@ class Setting: NSObject {
 }
 
 enum SettingName: String {
-    case firstDimension = "1080p"
-    case secondDimension = "720p"
-    case thirdDimension = "480p"
-    case fourthDimension = "360p"
+    case firstReso = "1080p"
+    case secondReso = "720p"
+    case thirdReso = "480p"
+    case fourthReso = "360p"
 }

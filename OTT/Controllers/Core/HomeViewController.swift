@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController{
+class HomeViewController: UIViewController {
    
     private lazy var menuBar: MenuBar = {
         let mb = MenuBar()
@@ -97,10 +97,6 @@ class HomeViewController: UIViewController{
         view.addConstraintsWithFormat(format: "V:[v0(60)]", views: menuBar)
         
         menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
-    }
-    
-    func goToBack() {
-        navigationController?.popViewController(animated: true)
     }
 }
 

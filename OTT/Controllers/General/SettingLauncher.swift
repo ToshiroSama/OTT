@@ -19,11 +19,11 @@ class SettingLauncher: NSObject {
     
     let cellHeight: CGFloat = 50
     let settings: [Setting] = {
-        let firstDimension = Setting(sizeName: .firstDimension, imageName: "checkmark")
-        let secondDimension = Setting(sizeName: .secondDimension, imageName: "checkmark")
-        let thirdDimension = Setting(sizeName: .thirdDimension, imageName: "checkmark")
-        let fourthDimension = Setting(sizeName: .fourthDimension, imageName: "checkmark")
-        return [firstDimension, secondDimension, thirdDimension, fourthDimension]
+        let firstReso = Setting(sizeName: .firstReso, imageName: "checkmark")
+        let secondReso = Setting(sizeName: .secondReso, imageName: "checkmark")
+        let thirdReso = Setting(sizeName: .thirdReso, imageName: "checkmark")
+        let fourthReso = Setting(sizeName: .fourthReso, imageName: "checkmark")
+        return [firstReso, secondReso, thirdReso, fourthReso]
     }()
     
     override init() {

@@ -34,10 +34,25 @@ class VideoLauncher: UIView {
         if isPlaying {
             player?.pause()
             pausePlayButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            pausePlayButton.backgroundColor = UIColor(white: 0, alpha: 0)
+            pausePlayButton.tintColor = .white
+            controlsContainterView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+            backButton.isHidden = false
+            settingsButton.isHidden = false
+            circleLabel.isHidden = false
+            textLabel.isHidden = false
+            aspectRatioButton.isHidden = false
+            landscapeButton.isHidden = false
         } else {
             player?.play()
             pausePlayButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            controlsContainterView.backgroundColor = .clear
+            pausePlayButton.tintColor = .clear
+            backButton.isHidden = true
+            settingsButton.isHidden = true
+            circleLabel.isHidden = true
+            textLabel.isHidden = true
+            aspectRatioButton.isHidden = true
+            landscapeButton.isHidden = true
         }
         
         isPlaying = !isPlaying
@@ -48,6 +63,7 @@ class VideoLauncher: UIView {
         label.text = "Прямой эфир"
         label.textColor = .white
         label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -57,8 +73,36 @@ class VideoLauncher: UIView {
         let image = UIImage(systemName: "circle.fill")
         imageView.image = image
         imageView.tintColor = UIColor.rgb(red: 133, green: 237, blue: 129)
+        imageView.isHidden = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    var backButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: "chevron.left")
+        button.setImage(image, for: UIControl.State())
+        button.tintColor = .white
+        button.isHidden = true
+        button.addTarget(self, action: #selector(goToBack(sender:)), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    @objc func goToBack(sender: UIButton) {
+//        var segue = UINavigationController()
+//        let homeViewController = HomeViewController()
+//        segue.navigationController?.pushViewController(homeViewController, animated: true)
+    }
+    
+    lazy var settingsButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "gearshape")
+        button.setImage(image, for: .normal)
+        button.tintColor = .white
+        button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     lazy var landscapeButton: UIButton = {
@@ -66,6 +110,7 @@ class VideoLauncher: UIView {
         let image = UIImage(named: "viewfinder")
         button.setImage(image, for: .normal)
         button.tintColor = .white
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -75,6 +120,7 @@ class VideoLauncher: UIView {
         let image = UIImage(named: "aspectRatio")
         button.setImage(image, for: .normal)
         button.tintColor = .white
+        button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -82,7 +128,6 @@ class VideoLauncher: UIView {
     lazy var controlsContainterView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(white: 0, alpha: 1)
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -91,19 +136,8 @@ class VideoLauncher: UIView {
         backgroundColor = .black
         
         setupPlayerView()
-        addGradient()
         embedSubviews()
         setupConstraints()
-    }
-    
-    private func addGradient() {
-//        let gradientLayer = CAGradientLayer()
-//        gradientLayer.colors = [
-//            UIColor.clear.cgColor,
-//            UIColor.systemBackground.cgColor
-//        ]
-//        gradientLayer.frame = bounds
-//        layer.addSublayer(gradientLayer)
     }
     
     fileprivate func embedSubviews() {
@@ -112,6 +146,8 @@ class VideoLauncher: UIView {
         
         controlsContainterView.addSubview(activityIndicatorView)
         controlsContainterView.addSubview(pausePlayButton)
+        controlsContainterView.addSubview(backButton)
+        controlsContainterView.addSubview(settingsButton)
         controlsContainterView.addSubview(circleLabel)
         controlsContainterView.addSubview(textLabel)
         controlsContainterView.addSubview(landscapeButton)
@@ -136,6 +172,18 @@ class VideoLauncher: UIView {
             pausePlayButton.centerYAnchor.constraint(equalTo: centerYAnchor),
             pausePlayButton.widthAnchor.constraint(equalToConstant: 30),
             pausePlayButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
+            backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            backButton.widthAnchor.constraint(equalToConstant: 8),
+            backButton.heightAnchor.constraint(equalToConstant: 13)
+        ])
+        
+        NSLayoutConstraint.activate([
+            settingsButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            settingsButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -18)
         ])
         
         NSLayoutConstraint.activate([
@@ -182,8 +230,9 @@ class VideoLauncher: UIView {
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "currentItem.loadedTimeRanges" {
             activityIndicatorView.stopAnimating()
-            controlsContainterView.backgroundColor = .clear
+//            controlsContainterView.backgroundColor = UIColor.black.withAlphaComponent(0.6)
             pausePlayButton.isHidden = false
+            pausePlayButton.tintColor = .clear
             isPlaying = true
         }
     }
